@@ -2,7 +2,7 @@ name: XMLRPC Check
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Set the desired schedule (every day at midnight in this example)
+    - cron: '0 * * * *'  # Set the desired schedule (every hour)
 
 jobs:
   check_xmlrpc:
