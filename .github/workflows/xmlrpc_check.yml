@@ -1,0 +1,33 @@
+name: XMLRPC Check
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Set the desired schedule (every day at midnight in this example)
+
+jobs:
+  check_xmlrpc:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '14'
+
+    - name: Run script
+      run: |
+        check_xmlrpc() {
+          response=$(curl -Is $1 | head -n 1)
+          if [[ "$response" == *"200 OK"* ]]; then
+            echo "$1: xmlrpc.php is enabled"
+          else
+            echo "$1: xmlrpc.php is not enabled"
+          fi
+        }
+
+        check_xmlrpc "https://spocto.com"
+        check_xmlrpc "https://go-yubi.com"
+        check_xmlrpc "https://go-yubi.com/careers/"
