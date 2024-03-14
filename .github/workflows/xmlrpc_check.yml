@@ -27,7 +27,7 @@ jobs:
             echo "$1: xmlrpc.php is not enabled"
           fi
         }
-
+        
         check_xmlrpc "https://spocto.com"
         check_xmlrpc "https://go-yubi.com"
         check_xmlrpc "https://go-yubi.com/careers/"
