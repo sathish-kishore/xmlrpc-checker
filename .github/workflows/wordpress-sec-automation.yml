@@ -1,0 +1,44 @@
+name: Hourly Security Scan
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # Runs every hour
+
+jobs:
+  security_scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Scan for exposed endpoints
+        run: |
+          # Define URLs to scan
+          urls=(
+            "https://spocto.com"
+            "https://go-yubi.com"
+            "https://go-yubi.com/careers/"
+          )
+
+          # Define endpoints to scan
+          endpoints=(
+            "/xmlrpc.php"
+            "/cron.php"
+            "/wp-json"
+            "/wp-content/debug.log"
+            "/wp-content"
+            "/wp-login.php"
+            "/wp-admin.php"
+            "/wp-admin/login.php"
+          )
+
+          # Loop through each URL and endpoint combination and scan
+          for url in "${urls[@]}"; do
+            echo "Scanning $url"
+            for endpoint in "${endpoints[@]}"; do
+              full_url="$url$endpoint"
+              echo -n "Checking $full_url: "
+              curl -sILk "$full_url" | grep -q "HTTP/1.1 200 OK" && echo "Found" || echo "Not found"
+            done
+          done
