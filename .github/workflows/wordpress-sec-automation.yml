@@ -7,10 +7,18 @@ on:
 jobs:
   security_scan:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
 
     steps:
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+
       - name: Checkout code
-        uses: actions/checkout@latest
+        uses: actions/checkout@v2
 
       - name: Scan for exposed endpoints
         run: |
